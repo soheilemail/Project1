@@ -1,0 +1,1 @@
+Start /Wait "" XCopy Y:\ "D:\lab\Linux Share1" /E /H /Y
