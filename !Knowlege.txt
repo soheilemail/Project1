@@ -23,3 +23,4 @@ Restore Database:
     2.Multi Database
            psql -f /mnt/share1/AllPgDatabases.Backup postgres
 
+-
