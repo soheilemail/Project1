@@ -175,7 +175,7 @@ ALTER FUNCTION int1.url(ur character varying, fixed_url text) OWNER TO postgres;
 CREATE FUNCTION pub1.ap_addusr1(js jsonb) RETURNS character varying
     LANGUAGE plpgsql
     AS $$
- DECLARE appname_ varchar(50); DECLARE uid_ bigint; DECLARE usrname_ varchar(20); DECLARE email_ varchar(50);
+ DECLARE res character varying; DECLARE appname_ varchar(50); DECLARE uid_ bigint; DECLARE usrname_ varchar(20); DECLARE email_ varchar(50);
 begin
   appname_ = trim(js::jsonb->>'name');
   uid_ = js::jsonb->>'uid';
@@ -185,16 +185,16 @@ begin
   if appname_ = 'adduser' then
     insert into int1.user1 (uid, usrname, email) values(uid_, usrname_, email_)
     On conflict (uid) Do update set usrname = usrname_, email = email_;   
-	return 'Add ID: ' || uid_ || '   UserName: ' || usrname_;
+	res = 'Add user';
 	
   elsif appname_ = 'deluser' then
     Delete From int1.user1 where usrname = usrname_ or uid = uid_ or email = email_;
-	return 'Delete ID: ' || uid_ || '   UserName: ' || usrname_;
+	res = 'delete user';
   else	
-    return 'error appname: ' || 'appname_';
+    res = 'error appname: ' || 'appname_';
   end if;
   
---  return 'ID: ' || uid_ || '   UserName: ' || usrname_;
+  return res || ' - ' || jsonb_pretty (js::jsonb);
 end;
 $$;
 
@@ -356,7 +356,7 @@ COPY int1.ureg (uid, id_apps, vkey, rkey, createat) FROM stdin;
 
 COPY int1.user1 (uid, usrname, pics, info, email, createat) FROM stdin;
 9116872	ddddddddd	\N	\N	\N	2019-07-26 14:56:48
-911556872	d1dd1dddd	\N	\N	soheilemail@gmail.com	2019-07-26 14:57:35
+911556872	iiiiiiiiiiiiiiiiddd	\N	\N	\N	2019-07-26 14:57:35
 947156872	d1dddddd	\N	\N	soheilemail@gmail.com	2019-08-05 15:30:57
 \.
 
